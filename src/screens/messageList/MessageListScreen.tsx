@@ -16,12 +16,11 @@ import CustomLoader from "../../components/CustomLoader";
 
 const MessageListScreen: React.FC = () => {
   const flatListRef = useRef<FlatList<Message>>(null);
-  const [hasReachedEnd, setHasReachedEnd] = useState<boolean>(false);
-
-  const { onItemLayout, getItemLayout, itemHeights } = useItemHeights();
 
   const { messages, loadMessageById, loadMoreMessages, hasMoreMessages } =
     useMessages();
+
+  const { onItemLayout, getItemLayout, itemHeights } = useItemHeights();
 
   const { isLoading, handleScrollToMessage } = useScrollToMessage(
     messages,
@@ -30,10 +29,9 @@ const MessageListScreen: React.FC = () => {
     itemHeights
   );
 
-  const { scrollToEnd, handleEndReached } = useScrollToEnd(
+  const { scrollToEnd, handleEndReached, hasReachedEnd } = useScrollToEnd(
     flatListRef,
     loadMoreMessages,
-    setHasReachedEnd,
     hasMoreMessages
   );
 
