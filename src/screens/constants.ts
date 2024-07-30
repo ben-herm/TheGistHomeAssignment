@@ -1,0 +1,1 @@
+export const OFF_SET_FROM_BOTTOM = 100;

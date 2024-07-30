@@ -23,10 +23,10 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, onLayout }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: 15,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 26,
     backgroundColor: "#f9f9f9",
     borderRadius: 10,
     borderWidth: 1,
@@ -39,17 +39,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    alignItems: 'center',
+    alignItems: "center",
   },
   id: {
     marginRight: 15,
-    fontWeight: '800',
+    fontWeight: "800",
   },
   text: {
     fontSize: 16,
     color: "#333",
     flex: 1,
-    flexWrap: 'wrap',
+    flexWrap: "wrap",
   },
 });
 
