@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, LayoutChangeEvent } from "react-native";
-import { Message } from "../models/Messages";
+import { Message } from "../../../models/Messages";
 
 interface MessageItemProps {
   message: Message;
@@ -26,7 +26,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 15,
     marginVertical: 8,
-    marginHorizontal: 26,
+    marginLeft: 28,
+    marginRight: 8,
     backgroundColor: "#f9f9f9",
     borderRadius: 10,
     borderWidth: 1,
@@ -40,16 +41,18 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     alignItems: "center",
+    justifyContent: "center",
   },
   id: {
-    marginRight: 15,
     fontWeight: "800",
+    textAlign: "center",
   },
   text: {
     fontSize: 16,
     color: "#333",
     flex: 1,
-    flexWrap: "wrap",
+    textAlign: "center",
+    padding: 16,
   },
 });
 

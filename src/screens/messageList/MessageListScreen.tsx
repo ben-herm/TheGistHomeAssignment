@@ -1,14 +1,15 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import Toast from "react-native-toast-message";
-import MessageItem from "../components/MessageItem";
-import MessageFooter from "../components/MessageFooter";
-import ScrollToBottomButton from "../components/ScrollToBottomButton";
-import { Message } from "../models/Messages";
+import MessageItem from "./components/MessageItem";
+import MessageFooter from "./components/MessageFooter";
+import ScrollToBottomButton from "./components/ScrollToBottomButton";
+import { Message } from "../../models/Messages";
 import { useItemHeights } from "./hooks/useMessagesHeights";
 import { useScrollToBottom } from "./hooks/useScrollToBottom";
 import { useScrollToMessage } from "./hooks/useScrollToMessage";
 import { useMessages } from "./hooks/useMessages";
+import CustomHeader from "../../components/CustomHeader";
 
 const MessageListScreen: React.FC = () => {
   const flatListRef = useRef<FlatList<Message>>(null);
@@ -28,17 +29,13 @@ const MessageListScreen: React.FC = () => {
     [calculateOffset]
   );
 
-  const {
-    messages,
-    loadMessageById,
-    loadMoreMessages,
-    hasMoreMessages,
-  } = useMessages();
+  const { messages, loadMessageById, loadMoreMessages, hasMoreMessages } =
+    useMessages();
 
   const { targetLoading, handleScrollToMessage } = useScrollToMessage(
     scrollToPosition,
     messages,
-    loadMessageById,
+    loadMessageById
   );
 
   const scrollToEnd = useCallback(() => {
@@ -79,6 +76,7 @@ const MessageListScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <CustomHeader />
       <FlatList
         ref={flatListRef}
         data={messages}
@@ -111,10 +109,7 @@ const MessageListScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    textAlign: "center",
     position: "relative",
-    justifyContent: "center",
-    alignContent: "center",
   },
   loadingIndicator: {
     position: "absolute",

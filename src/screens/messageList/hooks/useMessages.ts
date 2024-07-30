@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { getMessages, getMessageById } from "../../services/messageService";
-import { Message } from "../../models/Messages";
+import { getMessages, getMessageById } from "../../../services/messageService";
+import { Message } from "../../../models/Messages";
 
 export const useMessages = (initialLoad: number = 20) => {
   const [messages, setMessages] = useState<Message[]>(

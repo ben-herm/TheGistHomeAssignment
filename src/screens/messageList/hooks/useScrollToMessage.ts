@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import Toast from "react-native-toast-message";
-import { Message } from "../../models/Messages";
+import { Message } from "../../../models/Messages";
 
 export const useScrollToMessage = (
   scrollToPosition: (index: number) => void,
