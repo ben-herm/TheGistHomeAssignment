@@ -22,8 +22,8 @@ export const useScrollToMessage = (
         scrollToPosition(index, flatListRef, itemHeights);
         setIsLoading(false);
       } else {
-        setTargetMessageId(id);
         await loadMessageById(id);
+        setTargetMessageId(id);
       }
     },
     [loadMessageById]

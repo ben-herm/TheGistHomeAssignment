@@ -1,5 +1,5 @@
 import React, { useRef, useState, useCallback } from "react";
-import { View, FlatList, StyleSheet, ActivityIndicator } from "react-native";
+import { View, FlatList, StyleSheet } from "react-native";
 import Toast from "react-native-toast-message";
 import { Message } from "../../models/Messages";
 import { useItemHeights } from "./hooks/useMessagesHeights";
@@ -12,6 +12,7 @@ import ScrollToBottomButton from "./components/ScrollToBottomButton";
 import { useShowScrollToBottomButton } from "./hooks/useShowScrollToBottomButton";
 import { onScrollToIndexFailed as onScrollToIndexFailedUtil } from "./scrollUtils";
 import { useScrollToEnd } from "./hooks/useScrollToEnd";
+import CustomLoader from "../../components/CustomLoader";
 
 const MessageListScreen: React.FC = () => {
   const flatListRef = useRef<FlatList<Message>>(null);
@@ -36,7 +37,7 @@ const MessageListScreen: React.FC = () => {
     hasMoreMessages
   );
 
-  const { showScrollToBottomButton, handleScroll } =
+  const { showScrollToBottomButton, shouldShowBottomButton } =
     useShowScrollToBottomButton(hasReachedEnd);
 
   const onScrollToIndexFailed = useCallback(
@@ -66,7 +67,7 @@ const MessageListScreen: React.FC = () => {
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
         contentContainerStyle={{ paddingBottom: 60 }}
-        onScroll={handleScroll}
+        onScroll={shouldShowBottomButton}
         onScrollToIndexFailed={onScrollToIndexFailed}
         getItemLayout={getItemLayout}
       />
@@ -75,9 +76,7 @@ const MessageListScreen: React.FC = () => {
         onPress={scrollToEnd}
         visible={showScrollToBottomButton}
       />
-      {isLoading && (
-        <ActivityIndicator style={styles.loadingIndicator} size="large" />
-      )}
+      {isLoading && <CustomLoader size={"large"} />}
       <Toast />
     </View>
   );
@@ -86,12 +85,6 @@ const MessageListScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  loadingIndicator: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: [{ translateX: -50 }, { translateY: -50 }],
   },
 });
 

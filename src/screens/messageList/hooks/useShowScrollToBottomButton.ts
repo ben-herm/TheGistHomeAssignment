@@ -6,7 +6,7 @@ export const useShowScrollToBottomButton = (hasReachedEnd: boolean) => {
   const [showScrollToBottomButton, setShowScrollToBottomButton] =
     useState<boolean>(false);
 
-  const handleScroll = useCallback(
+  const shouldShowBottomButton = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       const offsetY = event.nativeEvent.contentOffset.y;
       const contentHeight = event.nativeEvent.contentSize.height;
@@ -32,6 +32,6 @@ export const useShowScrollToBottomButton = (hasReachedEnd: boolean) => {
 
   return {
     showScrollToBottomButton,
-    handleScroll,
+    shouldShowBottomButton,
   };
 };
