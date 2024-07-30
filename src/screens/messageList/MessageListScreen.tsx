@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import Toast from "react-native-toast-message";
 import { Message } from "../../models/Messages";
@@ -11,41 +11,33 @@ import MessageFooter from "./components/MessageFooter";
 import ScrollToBottomButton from "./components/ScrollToBottomButton";
 import { useShowScrollToBottomButton } from "./hooks/useShowScrollToBottomButton";
 import { onScrollToIndexFailed as onScrollToIndexFailedUtil } from "./scrollUtils";
+import { useScrollToEnd } from "./hooks/useScrollToEnd";
 
 const MessageListScreen: React.FC = () => {
   const flatListRef = useRef<FlatList<Message>>(null);
   const [hasReachedEnd, setHasReachedEnd] = useState<boolean>(false);
+
   const { onItemLayout, getItemLayout, itemHeights } = useItemHeights();
-  const { showScrollToBottomButton, handleScroll } =
-    useShowScrollToBottomButton(hasReachedEnd);
 
   const { messages, loadMessageById, loadMoreMessages, hasMoreMessages } =
     useMessages();
 
-  const { targetLoading, handleScrollToMessage } = useScrollToMessage(
+  const { isLoading, handleScrollToMessage } = useScrollToMessage(
     messages,
     loadMessageById,
     flatListRef,
     itemHeights
   );
 
-  const scrollToEnd = useCallback(() => {
-    flatListRef.current?.scrollToEnd({ animated: true });
-  }, []);
+  const { scrollToEnd, handleEndReached } = useScrollToEnd(
+    flatListRef,
+    loadMoreMessages,
+    setHasReachedEnd,
+    hasMoreMessages
+  );
 
-  useEffect(() => {
-    if (!hasMoreMessages) {
-      setHasReachedEnd(true);
-    }
-  }, [hasMoreMessages]);
-
-  const handleEndReached = useCallback(() => {
-    if (hasMoreMessages) {
-      loadMoreMessages();
-    } else {
-      setHasReachedEnd(true);
-    }
-  }, [hasMoreMessages, loadMoreMessages]);
+  const { showScrollToBottomButton, handleScroll } =
+    useShowScrollToBottomButton(hasReachedEnd);
 
   const onScrollToIndexFailed = useCallback(
     (info: {
@@ -83,7 +75,7 @@ const MessageListScreen: React.FC = () => {
         onPress={scrollToEnd}
         visible={showScrollToBottomButton}
       />
-      {targetLoading && (
+      {isLoading && (
         <ActivityIndicator style={styles.loadingIndicator} size="large" />
       )}
       <Toast />
@@ -94,7 +86,6 @@ const MessageListScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: "relative",
   },
   loadingIndicator: {
     position: "absolute",

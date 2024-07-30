@@ -1,1 +1,1 @@
-export const OFF_SET_FROM_BOTTOM = 0;
+export const OFF_SET_FROM_BOTTOM = 5;
