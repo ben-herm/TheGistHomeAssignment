@@ -1,11 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
 import Toast from "react-native-toast-message";
 import { Message } from "../../../models/Messages";
+import { scrollToPosition } from "../scrollUtils";
 
 export const useScrollToMessage = (
-  scrollToPosition: (index: number) => void,
   messages: Message[],
   loadMessageById: (index: number) => void,
+  flatListRef: any,
+  itemHeights: React.MutableRefObject<{
+    [key: number]: number;
+  }>
 ) => {
   const [targetLoading, setTargetLoading] = useState<boolean>(false);
   const [targetMessageId, setTargetMessageId] = useState<number | null>(null);
@@ -15,21 +19,23 @@ export const useScrollToMessage = (
       setTargetLoading(true);
       const index = messages.findIndex((message) => message.id === id);
       if (index !== -1) {
-        scrollToPosition(index);
+        scrollToPosition(index, flatListRef, itemHeights);
         setTargetLoading(false);
       } else {
         setTargetMessageId(id);
         await loadMessageById(id);
       }
     },
-    [loadMessageById, scrollToPosition]
+    [loadMessageById]
   );
 
   useEffect(() => {
-    if (targetMessageId !== null) {
-      const index = messages.findIndex((message) => message.id === targetMessageId);
+    if (targetMessageId) {
+      const index = messages.findIndex(
+        (message) => message.id === targetMessageId
+      );
       if (index !== -1) {
-        scrollToPosition(index);
+        scrollToPosition(index, flatListRef, itemHeights);
         setTargetMessageId(null);
         setTargetLoading(false);
       } else {

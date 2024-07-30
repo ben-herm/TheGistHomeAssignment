@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Animated, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-
 interface ScrollToBottomButtonProps {
   onPress: () => void;
   visible: boolean;

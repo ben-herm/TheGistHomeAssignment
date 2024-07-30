@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import { OFF_SET_FROM_BOTTOM } from "../constants";
 
-export const useScrollToBottom = (hasReachedEnd: boolean) => {
+export const useShowScrollToBottomButton = (hasReachedEnd: boolean) => {
   const [showScrollToBottomButton, setShowScrollToBottomButton] =
     useState<boolean>(false);
 

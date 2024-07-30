@@ -1,41 +1,32 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import Toast from "react-native-toast-message";
-import MessageItem from "./components/MessageItem";
-import MessageFooter from "./components/MessageFooter";
-import ScrollToBottomButton from "./components/ScrollToBottomButton";
 import { Message } from "../../models/Messages";
 import { useItemHeights } from "./hooks/useMessagesHeights";
-import { useScrollToBottom } from "./hooks/useScrollToBottom";
 import { useScrollToMessage } from "./hooks/useScrollToMessage";
 import { useMessages } from "./hooks/useMessages";
 import CustomHeader from "../../components/CustomHeader";
+import MessageItem from "./components/MessageItem";
+import MessageFooter from "./components/MessageFooter";
+import ScrollToBottomButton from "./components/ScrollToBottomButton";
+import { useShowScrollToBottomButton } from "./hooks/useShowScrollToBottomButton";
+import { onScrollToIndexFailed as onScrollToIndexFailedUtil } from "./scrollUtils";
 
 const MessageListScreen: React.FC = () => {
   const flatListRef = useRef<FlatList<Message>>(null);
   const [hasReachedEnd, setHasReachedEnd] = useState<boolean>(false);
-  const { onItemLayout, calculateOffset } = useItemHeights();
+  const { onItemLayout, getItemLayout, itemHeights } = useItemHeights();
   const { showScrollToBottomButton, handleScroll } =
-    useScrollToBottom(hasReachedEnd);
-
-  const scrollToPosition = useCallback(
-    (index: number) => {
-      const offset = calculateOffset(index);
-      flatListRef.current?.scrollToOffset({
-        offset,
-        animated: true,
-      });
-    },
-    [calculateOffset]
-  );
+    useShowScrollToBottomButton(hasReachedEnd);
 
   const { messages, loadMessageById, loadMoreMessages, hasMoreMessages } =
     useMessages();
 
   const { targetLoading, handleScrollToMessage } = useScrollToMessage(
-    scrollToPosition,
     messages,
-    loadMessageById
+    loadMessageById,
+    flatListRef,
+    itemHeights
   );
 
   const scrollToEnd = useCallback(() => {
@@ -62,16 +53,9 @@ const MessageListScreen: React.FC = () => {
       highestMeasuredFrameIndex: number;
       averageItemLength: number;
     }) => {
-      flatListRef.current?.scrollToOffset({
-        offset: info.averageItemLength * info.index,
-        animated: true,
-      });
-      flatListRef.current?.scrollToIndex({
-        index: info.index,
-        animated: true,
-      });
+      onScrollToIndexFailedUtil(info, flatListRef);
     },
-    []
+    [flatListRef]
   );
 
   return (
@@ -92,6 +76,7 @@ const MessageListScreen: React.FC = () => {
         contentContainerStyle={{ paddingBottom: 60 }}
         onScroll={handleScroll}
         onScrollToIndexFailed={onScrollToIndexFailed}
+        getItemLayout={getItemLayout}
       />
       <MessageFooter onScrollToMessage={handleScrollToMessage} />
       <ScrollToBottomButton

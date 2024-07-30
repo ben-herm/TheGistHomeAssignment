@@ -1,4 +1,5 @@
 import { useRef, useCallback } from "react";
+import { calculateOffset } from "../scrollUtils";
 
 export const ITEM_VERTICAL_MARGIN = 8;
 
@@ -9,14 +10,14 @@ export const useItemHeights = () => {
     itemHeights.current[index] = height;
   }, []);
 
-  const calculateOffset = useCallback((index: number) => {
-    let offset = 0;
-    for (let i = 0; i < index; i++) {
-      offset += itemHeights.current[i] || 0;
-      offset += ITEM_VERTICAL_MARGIN * 2;
-    }
-    return offset;
-  }, []);
+  const getItemLayout = useCallback(
+    (data: any, index: number) => {
+      const length = itemHeights.current[index] || 0;
+      const offset = calculateOffset(index, itemHeights);
+      return { length, offset, index };
+    },
+    [calculateOffset]
+  );
 
-  return { itemHeights, onItemLayout, calculateOffset };
+  return { itemHeights, onItemLayout, calculateOffset, getItemLayout };
 };
