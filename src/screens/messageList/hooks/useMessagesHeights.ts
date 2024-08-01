@@ -10,14 +10,11 @@ export const useItemHeights = () => {
     itemHeights.current[index] = height;
   }, []);
 
-  const getItemLayout = useCallback(
-    (data: any, index: number) => {
-      const length = itemHeights.current[index] || 0;
-      const offset = calculateOffset(index, itemHeights);
-      return { length, offset, index };
-    },
-    [calculateOffset]
-  );
+  const getItemLayout = useCallback((data: any, index: number) => {
+    const length = itemHeights.current[index] || 0;
+    const offset = calculateOffset(index, itemHeights);
+    return { length, offset, index };
+  }, []);
 
   return { itemHeights, onItemLayout, calculateOffset, getItemLayout };
 };

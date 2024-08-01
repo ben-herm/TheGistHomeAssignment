@@ -1,6 +1,5 @@
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
-import Toast from "react-native-toast-message";
 import { Message } from "../../models/Messages";
 import { useItemHeights } from "./hooks/useMessagesHeights";
 import { useScrollToMessage } from "./hooks/useScrollToMessage";
@@ -8,11 +7,9 @@ import { useMessages } from "./hooks/useMessages";
 import CustomHeader from "../../components/CustomHeader";
 import MessageItem from "./components/MessageItem";
 import MessageFooter from "./components/MessageFooter";
-import ScrollToBottomButton from "./components/ScrollToBottomButton";
-import { useShowScrollToBottomButton } from "./hooks/useShowScrollToBottomButton";
-import { onScrollToIndexFailed as onScrollToIndexFailedUtil } from "./scrollUtils";
 import { useScrollToEnd } from "./hooks/useScrollToEnd";
 import CustomLoader from "../../components/CustomLoader";
+import { handleScrollToIndexFailed } from "./scrollUtils";
 
 const MessageListScreen: React.FC = () => {
   const flatListRef = useRef<FlatList<Message>>(null);
@@ -29,24 +26,9 @@ const MessageListScreen: React.FC = () => {
     itemHeights
   );
 
-  const { scrollToEnd, handleEndReached, hasReachedEnd } = useScrollToEnd(
-    flatListRef,
+  const { handleEndReached } = useScrollToEnd(
     loadMoreMessages,
     hasMoreMessages
-  );
-
-  const { showScrollToBottomButton, shouldShowBottomButton } =
-    useShowScrollToBottomButton(hasReachedEnd);
-
-  const onScrollToIndexFailed = useCallback(
-    (info: {
-      index: number;
-      highestMeasuredFrameIndex: number;
-      averageItemLength: number;
-    }) => {
-      onScrollToIndexFailedUtil(info, flatListRef);
-    },
-    [flatListRef]
   );
 
   return (
@@ -63,19 +45,16 @@ const MessageListScreen: React.FC = () => {
           />
         )}
         onEndReached={handleEndReached}
+        decelerationRate={0.6}
         onEndReachedThreshold={0.5}
         contentContainerStyle={{ paddingBottom: 60 }}
-        onScroll={shouldShowBottomButton}
-        onScrollToIndexFailed={onScrollToIndexFailed}
+        onScrollToIndexFailed={(error) =>
+          handleScrollToIndexFailed(error, flatListRef, messages)
+        }
         getItemLayout={getItemLayout}
       />
       <MessageFooter onScrollToMessage={handleScrollToMessage} />
-      <ScrollToBottomButton
-        onPress={scrollToEnd}
-        visible={showScrollToBottomButton}
-      />
       {isLoading && <CustomLoader size={"large"} />}
-      <Toast />
     </View>
   );
 };

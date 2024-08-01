@@ -1,31 +1,23 @@
-import { useCallback, RefObject, useEffect, useState } from "react";
-import { FlatList } from "react-native";
-import { Message } from "../../../models/Messages";
+import { useCallback, useEffect, useState } from "react";
 
 export const useScrollToEnd = (
-  flatListRef: RefObject<FlatList<Message>>,
   loadMoreMessages: () => void,
   hasMoreMessages: boolean
 ) => {
   const [hasReachedEnd, setHasReachedEnd] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!hasMoreMessages) {
-      setHasReachedEnd(true);
-    }
+    if (!hasMoreMessages) setHasReachedEnd(true);
   }, [hasMoreMessages]);
 
   const handleEndReached = useCallback(() => {
     if (hasMoreMessages) {
       loadMoreMessages();
-    } else {
-      setHasReachedEnd(true);
+      return;
     }
+
+    setHasReachedEnd(true);
   }, [hasMoreMessages, loadMoreMessages]);
 
-  const scrollToEnd = useCallback(() => {
-    flatListRef.current?.scrollToEnd({ animated: true });
-  }, [flatListRef]);
-
-  return { scrollToEnd, handleEndReached, hasReachedEnd };
+  return { handleEndReached, hasReachedEnd };
 };

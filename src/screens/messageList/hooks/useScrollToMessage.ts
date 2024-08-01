@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import Toast from "react-native-toast-message";
 import { Message } from "../../../models/Messages";
 import { scrollToPosition } from "../scrollUtils";
 
@@ -19,14 +18,14 @@ export const useScrollToMessage = (
       setIsLoading(true);
       const index = messages.findIndex((message) => message.id === id);
       if (index !== -1) {
-        scrollToPosition(index, flatListRef, itemHeights);
+        scrollToPosition(index, flatListRef, messages, id);
         setIsLoading(false);
       } else {
         await loadMessageById(id);
         setTargetMessageId(id);
       }
     },
-    [loadMessageById]
+    [loadMessageById, messages, flatListRef, itemHeights]
   );
 
   useEffect(() => {
@@ -35,19 +34,14 @@ export const useScrollToMessage = (
         (message) => message.id === targetMessageId
       );
       if (index !== -1) {
-        scrollToPosition(index, flatListRef, itemHeights);
+        scrollToPosition(index, flatListRef, messages, targetMessageId);
         setTargetMessageId(null);
         setIsLoading(false);
       } else {
-        Toast.show({
-          type: "error",
-          text1: "Error",
-          text2: "Message ID not found",
-        });
         setIsLoading(false);
       }
     }
-  }, [messages, targetMessageId, scrollToPosition]);
+  }, [messages, targetMessageId, flatListRef, itemHeights]);
 
   return {
     isLoading,
