@@ -7,7 +7,7 @@ Expo CLI: Install Expo CLI globally using npm or yarn.
 npm install -g expo-cli
 
 - Runnning on Android Simulator:
-1. make sure the next are installed and you followed this guide [install android studio]([URL](https://reactnative.dev/docs/set-up-your-environment?platform=android)
+1. make sure the next are installed and you followed this guide [install android studio](https://reactnative.dev/docs/set-up-your-environment?platform=android)
 
 2. After Android Studio is installed - create a virtual device to run the project on in android studio [Create virtual device](https://developer.android.com/studio/run/managing-avds)
 
