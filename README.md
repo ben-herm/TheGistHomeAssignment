@@ -7,9 +7,9 @@ Expo CLI: Install Expo CLI globally using npm or yarn.
 npm install -g expo-cli
 
 - Runnning on Android Simulator:
-1. make sure the next are installed and you followed this guide [Guide]([URL](https://reactnative.dev/docs/set-up-your-environment?platform=android))
+1. make sure the next are installed and you followed this guide [install android studio]([URL](https://reactnative.dev/docs/set-up-your-environment?platform=android)
 
-2. After Android Studio is installed - create a virtual device to run the project on in android studio [Guide]( https://developer.android.com/studio/run/managing-avds)
+2. After Android Studio is installed - create a virtual device to run the project on in android studio [Create virtual device](https://developer.android.com/studio/run/managing-avds)
 
  - Run npm install in root directory
 - npx expo start or expo start to start the metro bundler
